@@ -23,10 +23,11 @@ from bokeh.palettes import Spectral6
 from bokeh.layouts import widgetbox, row, gridplot
 from bokeh.models import Slider, Select
 
-data_death = pd.read_csv("https://github.com/serlysetyani/tubes-visdat/blob/main/no_of_deaths_by_country_clean.csv?raw=true")
+data_death = pd.read_csv(
+    "https://github.com/serlysetyani/tubes-visdat/blob/main/no_of_deaths_by_country_clean.csv?raw=true")
 data_death.head()
 
-data_death.rename(columns = {'WHO Region':'Region'}, inplace = True)
+data_death.rename(columns={'WHO Region': 'Region'}, inplace=True)
 
 data_death.head()
 
@@ -34,21 +35,23 @@ data_byregion = data_death.Country.unique().tolist()
 color_mapper = CategoricalColorMapper(factors=data_byregion, palette=Spectral6)
 
 source = ColumnDataSource(data={
-    'x'       : data_death.Region,
-    'y'       : data_death.Year,
-    'min'     : data_death.Count_min,
-    'max'     : data_death.Count_max,
+    'x': data_death.Region,
+    'y': data_death.Year,
+    'min': data_death.Count_min,
+    'max': data_death.Count_max,
 })
 
 plot = figure(title='1970', x_axis_label='Region', y_axis_label='Years',
-           plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@region')])
+              plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@region')])
 
 plot.circle(x='x', y='y', source=source, fill_alpha=0.8,
-           color=dict(field='region', transform=color_mapper), legend='region')
+            color=dict(field='region', transform=color_mapper), legend='region')
 
 plot.legend.location = 'bottom_left'
 
 # Define the callback function: update_plot
+
+
 def update_plot(attr, old, new):
     # set the `yr` name to `slider.value` and `source.data = new_data`
     yr = slider.value
@@ -59,24 +62,26 @@ def update_plot(attr, old, new):
     plot.yaxis.axis_label = y
     # new data
     new_data = {
-    'x'       : data_death.loc[yr][x],
-    'y'       : data_death.loc[yr][y],
-    'min'     : data_death.loc[yr].Count_min,
-    'max'     : data_death.loc[yr].Count_max,
+        'x': data_death.loc[yr][x],
+        'y': data_death.loc[yr][y],
+        'min': data_death.loc[yr].Count_min,
+        'max': data_death.loc[yr].Count_max,
     }
     source.data = new_data
-    
+
     # Add title to figure: plot.title.text
     plot.title.text = 'Gapminder data for %d' % yr
 
+
 # Make a slider object: slider
 slider = Slider(start=1970, end=2010, step=1, value=1970, title='Year')
-slider.on_change('value',update_plot)
+slider.on_change('value', update_plot)
 
 # Make dropdown menu for x and y axis
 # Create a dropdown Select widget for the x data: x_select
 x_select = Select(
-    options=['Africa', 'America', 'Eastern Mediterranean', 'Europe', 'South-East Asia', 'Western Pacific'],
+    options=['Africa', 'America', 'Eastern Mediterranean',
+             'Europe', 'South-East Asia', 'Western Pacific'],
     value='Africa',
     title='x-axis data'
 )
@@ -91,7 +96,10 @@ y_select = Select(
 )
 # Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot)
-    
+
 # Create layout and add to current document
 layout = row(widgetbox(slider, x_select, y_select), plot)
 curdoc().add_root(layout)
+
+
+# hiii
