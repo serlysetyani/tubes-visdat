@@ -22,14 +22,14 @@ from bokeh.models import CategoricalColorMapper
 from bokeh.palettes import Spectral6
 from bokeh.layouts import widgetbox, row, gridplot
 from bokeh.models import Slider, Select
+from bokeh.io import output_file, show
+
 
 data_death = pd.read_csv(
     "https://github.com/serlysetyani/tubes-visdat/blob/main/no_of_deaths_by_country_clean.csv?raw=true")
 data_death.head()
 
 data_death.rename(columns={'WHO Region': 'Region'}, inplace=True)
-
-data_death.head()
 
 data_byregion = data_death.Country.unique().tolist()
 color_mapper = CategoricalColorMapper(factors=data_byregion, palette=Spectral6)
