@@ -32,18 +32,18 @@ data_death.rename(columns={'WHO Region': 'Region'}, inplace=True)
 data_death.set_index('Year', inplace=True)
 
 
-data_byregion = data_death.Country.unique().tolist()
+data_byregion = data_death.Region.unique().tolist()
 color_mapper = CategoricalColorMapper(factors=data_byregion, palette=Spectral6)
 
 source = ColumnDataSource(data={
-    'x': data_death.loc[2000].Region,
-    'y': data_death.loc[2000].Country,
-    'min': data_death.loc[2000].Count_min,
-    'max': data_death.loc[2000].Count_max,
+    'x': data_death.loc[2000].Count_min,
+    'y': data_death.loc[2000].Count_max,
+    'country': data_death.loc[2000].Country,
+    'region': data_death.loc[2000].Region,
 })
 
-plot = figure(title='1970', x_axis_label='Region', y_axis_label='Years',
-              plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@region')])
+plot = figure(title='2000', x_axis_label='Count (min)', y_axis_label='Count (max)',
+              plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@country')])
 
 plot.circle(x='x', y='y', source=source, fill_alpha=0.8,
             color=dict(field='region', transform=color_mapper), legend='region')
@@ -65,8 +65,8 @@ def update_plot(attr, old, new):
     new_data = {
         'x': data_death.loc[yr][x],
         'y': data_death.loc[yr][y],
-        'min': data_death.loc[yr].Count_min,
-        'max': data_death.loc[yr].Count_max,
+        'country': data_death.loc[yr].Country,
+        'region': data_death.loc[yr].Region,
     }
     source.data = new_data
 
@@ -75,15 +75,14 @@ def update_plot(attr, old, new):
 
 
 # Make a slider object: slider
-slider = Slider(start=2000, end=2010, step=1, value=1970, title='Year')
+slider = Slider(start=2000, end=2010, step=1, value=2000, title='Year')
 slider.on_change('value', update_plot)
 
 # Make dropdown menu for x and y axis
 # Create a dropdown Select widget for the x data: x_select
 x_select = Select(
-    options=['Africa', 'America', 'Eastern Mediterranean',
-             'Europe', 'South-East Asia', 'Western Pacific'],
-    value='Africa',
+    options=['Count (min)', 'Count (med)', 'Count (max)'],
+    value='Count (min)',
     title='x-axis data'
 )
 # Attach the update_plot callback to the 'value' property of x_select
@@ -91,8 +90,8 @@ x_select.on_change('value', update_plot)
 
 # Create a dropdown Select widget for the y data: y_select
 y_select = Select(
-    options=['2000', '2010', '2018'],
-    value='2000',
+    options=['Count (min)', 'Count (med)', 'Count (max)'],
+    value='Count (max)',
     title='y-axis data'
 )
 # Attach the update_plot callback to the 'value' property of y_select
