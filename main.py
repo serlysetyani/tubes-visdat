@@ -29,15 +29,17 @@ data_death = pd.read_csv("data/no_of_deaths_by_country_clean.csv")
 data_death.head()
 
 data_death.rename(columns={'WHO Region': 'Region'}, inplace=True)
+data_death.set_index('Year', inplace=True)
+
 
 data_byregion = data_death.Country.unique().tolist()
 color_mapper = CategoricalColorMapper(factors=data_byregion, palette=Spectral6)
 
 source = ColumnDataSource(data={
-    'x': data_death.Region,
-    'y': data_death.Year,
-    'min': data_death.Count_min,
-    'max': data_death.Count_max,
+    'x': data_death.loc[2000].Region,
+    'y': data_death.loc[2000].Country,
+    'min': data_death.loc[2000].Count_min,
+    'max': data_death.loc[2000].Count_max,
 })
 
 plot = figure(title='1970', x_axis_label='Region', y_axis_label='Years',
@@ -73,7 +75,7 @@ def update_plot(attr, old, new):
 
 
 # Make a slider object: slider
-slider = Slider(start=2000, end=2010, step=1, value=2000, title='Year')
+slider = Slider(start=2000, end=2010, step=1, value=1970, title='Year')
 slider.on_change('value', update_plot)
 
 # Make dropdown menu for x and y axis
