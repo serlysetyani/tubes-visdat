@@ -25,8 +25,7 @@ from bokeh.models import Slider, Select
 from bokeh.io import output_file, show
 
 
-data_death = pd.read_csv(
-    "https://github.com/serlysetyani/tubes-visdat/blob/main/no_of_deaths_by_country_clean.csv?raw=true")
+data_death = pd.read_csv("data/no_of_deaths_by_country_clean.csv")
 data_death.head()
 
 data_death.rename(columns={'WHO Region': 'Region'}, inplace=True)
@@ -74,7 +73,7 @@ def update_plot(attr, old, new):
 
 
 # Make a slider object: slider
-slider = Slider(start=1970, end=2010, step=1, value=1970, title='Year')
+slider = Slider(start=2000, end=2010, step=1, value=2000, title='Year')
 slider.on_change('value', update_plot)
 
 # Make dropdown menu for x and y axis
@@ -100,7 +99,7 @@ y_select.on_change('value', update_plot)
 # Create layout and add to current document
 layout = row(widgetbox(slider, x_select, y_select), plot)
 curdoc().add_root(layout)
-
+curdoc().title = "Movies"
 
 # hiii
 # ivy tes
