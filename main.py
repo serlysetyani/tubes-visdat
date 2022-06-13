@@ -20,7 +20,7 @@ from bokeh.models import Slider, Select
 # In[2]:
 
 
-data = pd.read_csv('data/owid-covid-data.csv')
+data = pd.read_csv('./data/covid-data.csv')
 data['continent'] = data['continent'].astype(str)
 data['location'] = data['location'].astype(str)
 
@@ -41,15 +41,14 @@ color_mapper = CategoricalColorMapper(factors=regions_list, palette=Spectral6)
 
 
 # In[4]:
-
-
-# Make the ColumnDataSource: source
 source = ColumnDataSource(data={
     'x': data.loc[2020].new_deaths_per_million,
     'y': data.loc[2020].total_deaths_per_million,
     'location': data.loc[2020].location,
     'continent': data.loc[2020].continent,
 })
+
+# Make the ColumnDataSource: source
 
 
 # In[ ]:
