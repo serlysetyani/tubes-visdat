@@ -7,7 +7,6 @@
 
 # In[1]:
 
-
 import pandas as pd
 from bokeh.io import curdoc
 from bokeh.plotting import figure
@@ -21,7 +20,7 @@ from bokeh.models import Slider, Select
 # In[2]:
 
 
-data = pd.read_csv("./data/owid-covid-data.csv")
+data = pd.read_csv('data/owid-covid-data.csv')
 data['continent'] = data['continent'].astype(str)
 data['location'] = data['location'].astype(str)
 
