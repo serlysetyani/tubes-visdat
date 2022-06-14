@@ -13,8 +13,8 @@ from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.models import CategoricalColorMapper
 from bokeh.palettes import Spectral6
-from bokeh.layouts import widgetbox, row, gridplot
-from bokeh.models import Slider, Select
+from bokeh.layouts import widgetbox, row, gridplot, column
+from bokeh.models import Slider, Select, TableColumn, DataTable
 
 
 # In[2]:
@@ -76,14 +76,7 @@ def update_plot(attr, old, new):
     # Label axes of plot
     plot.xaxis.axis_label = x
     plot.yaxis.axis_label = y
-    # new data
-    # new_data = {
-    # 'x'       : data.loc[yr][x],
-    # 'y'       : data.loc[yr][y],
-    # 'country' : data.loc[yr].Country,
-    # 'pop'     : (data.loc[yr].population / 20000000) + 2,
-    # 'region'  : data.loc[yr].region,
-    # }
+
     new_data = {
         'x': data.loc[yr][x],
         'y': data.loc[yr][y],
@@ -121,8 +114,15 @@ y_select = Select(
 # Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot)
 
+columns = [
+    TableColumn(field="location", title="Country"),
+    TableColumn(field="y", title="Total Deaths"),
+]
+
 # Create layout and add to current document
-layout = row(widgetbox(slider, x_select, y_select), plot)
+layout = column(widgetbox(slider, x_select, y_select, plot),
+                DataTable(source=source, columns=columns, width=800))
+
 curdoc().add_root(layout)
 
 
