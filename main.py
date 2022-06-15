@@ -46,6 +46,7 @@ source = ColumnDataSource(data={
     'y': data.loc[2020].total_deaths_per_million,
     'location': data.loc[2020].location,
     'continent': data.loc[2020].continent,
+    'date': data.loc[2020].date,
 })
 
 # Make the ColumnDataSource: source
@@ -82,6 +83,7 @@ def update_plot(attr, old, new):
         'y': data.loc[yr][y],
         'location': data.loc[yr].location,
         'continent': data.loc[yr].continent,
+        'date': data.loc[yr].date,
     }
     source.data = new_data
 
@@ -117,6 +119,7 @@ y_select.on_change('value', update_plot)
 columns = [
     TableColumn(field="location", title="Country"),
     TableColumn(field="y", title="Total Deaths"),
+    TableColumn(field="date", title="Date"),
 ]
 
 # Create layout and add to current document
