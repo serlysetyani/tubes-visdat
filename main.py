@@ -31,10 +31,8 @@ data.set_index('Year', inplace=True)
 # In[3]:
 
 
-# Make a list of the unique values from the region column: regions_list
 regions_list = data.continent.unique().tolist()
 
-# Make a color mapper: color_mapper
 color_mapper = CategoricalColorMapper(factors=regions_list, palette=Spectral6)
 
 
@@ -47,32 +45,26 @@ source = ColumnDataSource(data={
     'date': data.loc[2020].date,
 })
 
-# Make the ColumnDataSource: source
 
 
 # In[ ]:
 
 
-# Create the figure: plot
 plot = figure(title='2020', x_axis_label='new_cases', y_axis_label='total_deaths',
               plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@location')])
 
-# Add a circle glyph to the figure p
 plot.circle(x='x', y='y', source=source, fill_alpha=0.8,
             color=dict(field='continent', transform=color_mapper), legend='continent')
 
-# Set the legend and axis attributes
 plot.legend.location = 'bottom_left'
 
-# Define the callback function: update_plot
 
 
 def update_plot(attr, old, new):
-    # set the `yr` name to `slider.value` and `source.data = new_data`
     yr = slider.value
     x = x_select.value
     y = y_select.value
-    # Label axes of plot
+    
     plot.xaxis.axis_label = x
     plot.yaxis.axis_label = y
 
@@ -85,33 +77,26 @@ def update_plot(attr, old, new):
     }
     source.data = new_data
 
-    # Add title to figure: plot.title.text
     plot.title.text = 'Gapminder data for %d' % yr
 
 
-# Make a slider object: slider
 slider = Slider(start=2020, end=2022, step=1, value=2020, title='Year')
 slider.on_change('value', update_plot)
 
-# Make dropdown menu for x and y axis
-# Create a dropdown Select widget for the x data: x_select
 x_select = Select(
     options=['new_cases', 'total_deaths',
              'total_deaths_per_million', 'new_deaths_per_million'],
     value='new_cases',
     title='x-axis data'
 )
-# Attach the update_plot callback to the 'value' property of x_select
 x_select.on_change('value', update_plot)
 
-# Create a dropdown Select widget for the y data: y_select
 y_select = Select(
     options=['new_cases', 'total_deaths',
              'total_deaths_per_million', 'new_deaths_per_million'],
     value='total_deaths',
     title='y-axis data'
 )
-# Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot)
 
 columns = [
@@ -120,7 +105,6 @@ columns = [
     TableColumn(field="date", title="Date"),
 ]
 
-# Create layout and add to current document
 layout = column(widgetbox(slider, x_select, y_select, plot),
                 DataTable(source=source, columns=columns, width=800))
 
