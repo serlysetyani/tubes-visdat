@@ -54,7 +54,7 @@ source = ColumnDataSource(data={
 
 
 # Create the figure: plot
-plot = figure(title='2020', x_axis_label='new_deaths_per_million', y_axis_label='total_deaths_per_million',
+plot = figure(title='2020', x_axis_label='new_cases', y_axis_label='total_deaths',
               plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@location')])
 
 # Add a circle glyph to the figure p
