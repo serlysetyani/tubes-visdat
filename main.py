@@ -15,7 +15,7 @@ from bokeh.palettes import Spectral6
 from bokeh.layouts import widgetbox, gridplot, column
 
 
-# In[2]:
+# In[2]: 
 
 
 data = pd.read_csv('./data/covid-data.csv')
@@ -31,9 +31,8 @@ data.set_index('Year', inplace=True)
 # In[3]:
 
 
-regions_list = data.continent.unique().tolist()
-
-color_mapper = CategoricalColorMapper(factors=regions_list, palette=Spectral6)
+listRegion = data.continent.unique().tolist()
+mapColor = CategoricalColorMapper(factors=listRegion, palette=Spectral6)
 
 
 # In[4]:
@@ -50,54 +49,54 @@ source = ColumnDataSource(data={
 # In[ ]:
 
 
-plot = figure(title='2020', x_axis_label='new_cases', y_axis_label='total_deaths',
+plot = figure(title='2020', x_axis_label='New Cases', y_axis_label='Total Deaths',
               plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@location')])
 
 plot.circle(x='x', y='y', source=source, fill_alpha=0.8,
-            color=dict(field='continent', transform=color_mapper), legend='continent')
+            color=dict(field='continent', transform=mapColor), legend='continent')
 
 plot.legend.location = 'bottom_left'
 
 
 
-def update_plot(attr, old, new):
-    yr = slider.value
-    x = x_select.value
-    y = y_select.value
+def updatePlot(attr, old, new):
+    year = slider.value
+    x = selectX.value
+    y = selectY.value
     
     plot.xaxis.axis_label = x
     plot.yaxis.axis_label = y
 
-    new_data = {
-        'x': data.loc[yr][x],
-        'y': data.loc[yr][y],
-        'location': data.loc[yr].location,
-        'continent': data.loc[yr].continent,
-        'date': data.loc[yr].date,
+    newData = {
+        'x': data.loc[year][x],
+        'y': data.loc[year][y],
+        'location': data.loc[year].location,
+        'continent': data.loc[year].continent,
+        'date': data.loc[year].date,
     }
-    source.data = new_data
+    source.data = newData
 
-    plot.title.text = 'Gapminder data for %d' % yr
+    plot.title.text = 'Gapminder data for %d' % year
 
 
 slider = Slider(start=2020, end=2022, step=1, value=2020, title='Year')
-slider.on_change('value', update_plot)
+slider.on_change('value', updatePlot)
 
-x_select = Select(
-    options=['new_cases', 'total_deaths',
-             'total_deaths_per_million', 'new_deaths_per_million'],
-    value='new_cases',
-    title='x-axis data'
+selectX = Select(
+    options=['New Cases', 'Total Deaths',
+             'Total Deaths (Per Million)', 'New Deaths (Per Million)'],
+    value='New Cases',
+    title='Select X'
 )
-x_select.on_change('value', update_plot)
+selectX.on_change('value', updatePlot)
 
-y_select = Select(
-    options=['new_cases', 'total_deaths',
-             'total_deaths_per_million', 'new_deaths_per_million'],
-    value='total_deaths',
-    title='y-axis data'
+selectY = Select(
+    options=['New Cases', 'Total Deaths',
+             'Total Deaths (Per Million)', 'New Deaths (Per Million)'],
+    value='Total Deaths',
+    title='Select Y'
 )
-y_select.on_change('value', update_plot)
+selectY.on_change('value', updatePlot) 
 
 columns = [
     TableColumn(field="location", title="Country"),
@@ -105,7 +104,7 @@ columns = [
     TableColumn(field="date", title="Date"),
 ]
 
-layout = column(widgetbox(slider, x_select, y_select, plot),
+layout = column(widgetbox(slider, selectX, selectY, plot),
                 DataTable(source=source, columns=columns, width=800))
 
 curdoc().add_root(layout)
