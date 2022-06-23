@@ -49,7 +49,7 @@ source = ColumnDataSource(data={
 # In[ ]:
 
 
-plot = figure(title='2020', x_axis_label='New Cases', y_axis_label='Total Deaths',
+plot = figure(title='Persebaran Data COVID 19 di Seluruh Dunia', x_axis_label='New Cases', y_axis_label='Total Deaths',
               plot_height=400, plot_width=700, tools=[HoverTool(tooltips='@location')])
 
 plot.circle(x='x', y='y', source=source, fill_alpha=0.8,
